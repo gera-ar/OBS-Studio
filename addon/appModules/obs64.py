@@ -1,5 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
-# Copyright (C) 2024 Gerardo Kessler <gera.ar@yahoo.com>
+# Copyright (C) 2025 Gerardo Kessler <gera.ar@yahoo.com>
 # This file is covered by the GNU General Public License.
 
 import appModuleHandler
@@ -9,9 +9,7 @@ from time import sleep
 import winUser
 from ui import message
 import speech
-from keyboardHandler import KeyboardInputGesture
 from threading import Thread
-import controlTypes
 import addonHandler
 
 # Lína de traducción
@@ -22,13 +20,12 @@ def mute(time, msg= False):
 	if msg:
 		message(msg)
 		sleep(0.1)
-	Thread(target=killSpeak, args=(time,), daemon= True).start()
-
-def killSpeak(time):
-	if speech.getState().speechMode != speech.SpeechMode.talk: return
-	speech.setSpeechMode(speech.SpeechMode.off)
-	sleep(time)
-	speech.setSpeechMode(speech.SpeechMode.talk)
+	if speech.getState().speechMode == speech.SpeechMode.talk:
+		def killSpeak(time):
+			speech.setSpeechMode(speech.SpeechMode.off)
+			sleep(time)
+			speech.setSpeechMode(speech.SpeechMode.talk)
+		Thread(target=killSpeak, args=(time,), daemon= True).start()
 
 class AppModule(appModuleHandler.AppModule):
 
@@ -37,15 +34,25 @@ class AppModule(appModuleHandler.AppModule):
 	def __init__(self, *args, **kwargs):
 		super(AppModule, self).__init__(*args, **kwargs)
 		self.fg = None
-		self.controls = None
-		self.sources = None
-		self.audio = None
 		self.status = None
+		self.scenes = None
+		self.sources = None
+		self.controls = None
+		self.audio_mixer = None
 		self.recordButton = None
-		self.appsKey = KeyboardInputGesture.fromName("applications")
-		self.downArrow = KeyboardInputGesture.fromName("downArrow")
 		# Translators: Mensaje de no encontrado
 		self.notFound = _('Elemento no encontrado')
+
+	def mouseClick(self, obj, mouse_button, text= None):
+		buttons = {
+			'left': [winUser.MOUSEEVENTF_LEFTDOWN, winUser.MOUSEEVENTF_LEFTUP],
+			'right': [winUser.MOUSEEVENTF_RIGHTDOWN, winUser.MOUSEEVENTF_RIGHTUP]
+		}
+		api.moveMouseToNVDAObject(obj)
+		if text: mute(0.2, obj.name)
+		winUser.mouse_event(buttons[mouse_button][0],0,0,None,None)
+		winUser.mouse_event(buttons[mouse_button][1],0,0,None,None)
+		mute(0.3)
 
 	def pressControl(self, id):
 		if not self.controls: self.windowObjects()
@@ -63,19 +70,9 @@ class AppModule(appModuleHandler.AppModule):
 			if not hasattr(child, 'UIAAutomationId'): continue
 			if child.UIAAutomationId == 'OBSBasic.controlsDock': self.controls = child
 			elif child.UIAAutomationId == 'OBSBasic.sourcesDock': self.sources = child
-			elif child.UIAAutomationId == 'OBSBasic.mixerDock': self.audio = child
 			elif child.UIAAutomationId == 'OBSBasic.statusbar': self.status = child
-
-	@script(gesture="kb:f4")
-	def script_openVideosFolder(self, gesture):
-		try:
-			# Translators: Mensaje de la opción mostrar ggrabaciones
-			mute(0.1, _('Mostrar Grabaciones'))
-			KeyboardInputGesture.fromName("alt+f").send()
-			mute(0.2)
-			KeyboardInputGesture.fromName("enter").send()
-		except:
-			pass
+			elif child.UIAAutomationId == 'OBSBasic.scenesDock': self.scenes = child
+			elif child.UIAAutomationId == 'OBSBasic.mixerDock': self.audio_mixer = child
 
 	@script(
 		category=category,
@@ -118,45 +115,23 @@ class AppModule(appModuleHandler.AppModule):
 			# Translators: Mensaje sobre ninguna grabación en curso
 			message(_('Ninguna grabación en curso'))
 
-	@script(gestures=[f"kb:control+{i}" for i in range(1, 10)])
-	def script_fuente(self, gesture):
-		x = int(gesture.mainKeyName) - 1
-		if not self.audio: self.windowObjects()
-		try:
-			obj = self.sources.firstChild.firstChild.firstChild.children[x]
-			api.moveMouseToNVDAObject(obj)
-			mute(0.2, obj.name)
-			winUser.mouse_event(winUser.MOUSEEVENTF_LEFTDOWN,0,0,None,None)
-			winUser.mouse_event(winUser.MOUSEEVENTF_LEFTUP,0,0,None,None)
-			mute(0.3)
-		except (IndexError, AttributeError):
-			# Translators: Anuncia que no hay fuentes seleccionadas
-			message(_('Sin fuente asignada'))
-
-	@script(
-		category=category,
-		# Translators: Descripción del elemento en el diálogo gestos de entrada
-		description= _('Crea una nueva fuente'),
-		gesture="kb:control+n"
-	)
-	def script_nuevaFuente(self, gesture):
-		if not self.sources: self.windowObjects()
-		add = self.sources.firstChild.firstChild.firstChild.next.firstChild
-		mute(0.1, add.name)
-		api.moveMouseToNVDAObject(add)
-		winUser.mouse_event(winUser.MOUSEEVENTF_LEFTDOWN,0,0,None,None)
-		winUser.mouse_event(winUser.MOUSEEVENTF_LEFTUP,0,0,None,None)
-		sleep(0.1)
-		self.appsKey.send()
-		sleep(0.1)
-		self.downArrow.send()
+	@script(gestures=["kb:control+1","kb:control+2","kb:control+3"])
+	def script_panelsFocus(self, gesture):
+		x = int(gesture.mainKeyName)
+		if not self.scenes: self.windowObjects()
+		if x == 3 and self.controls:
+			self.mouseClick(self.controls, 'right', True)
+		elif x == 1 and self.scenes:
+			self.mouseClick(self.scenes, 'left', True)
+		elif x == 2 and self.sources:
+			self.mouseClick(self.sources, 'left', True)
 
 	@script(gestures=[f"kb:control+shift+{i}" for i in range(1, 10)])
-	def script_audio(self, gesture):
+	def script_mixerAudio(self, gesture):
 		key = int(gesture.mainKeyName) - 1
-		if not self.audio: self.windowObjects()
+		if not self.audio_mixer: self.windowObjects()
 		try:
-			obj = self.audio.firstChild.firstChild.firstChild.firstChild.firstChild.firstChild.children[key].firstChild
+			obj = self.audio_mixer.firstChild.firstChild.firstChild.firstChild.firstChild.firstChild.children[key].firstChild
 			mute(0.1, obj.next.name)
 			obj.setFocus()
 		except (AttributeError, IndexError):
