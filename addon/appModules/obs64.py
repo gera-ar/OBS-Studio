@@ -56,7 +56,11 @@ class AppModule(appModuleHandler.AppModule):
 
 	def pressControl(self, id):
 		if not self.controls: self.windowObjects()
-		for control in reversed(self.controls.firstChild.firstChild.children):
+		try:
+			controls = self.controls.firstChild.firstChild.children
+		except:
+			return True
+		for control in reversed(controls):
 			if not hasattr(control, 'UIAAutomationId'): continue
 			if control.UIAAutomationId == id:
 				mute(0.5, control.name)
@@ -68,11 +72,11 @@ class AppModule(appModuleHandler.AppModule):
 		if not self.fg: self.fg = api.getForegroundObject()
 		for child in self.fg.children:
 			if not hasattr(child, 'UIAAutomationId'): continue
-			if child.UIAAutomationId == 'OBSBasic.controlsDock': self.controls = child
-			elif child.UIAAutomationId == 'OBSBasic.sourcesDock': self.sources = child
-			elif child.UIAAutomationId == 'OBSBasic.statusbar': self.status = child
-			elif child.UIAAutomationId == 'OBSBasic.scenesDock': self.scenes = child
-			elif child.UIAAutomationId == 'OBSBasic.mixerDock': self.audio_mixer = child
+			if child.UIAAutomationId == 'OBSApp.OBSBasic.controlsDock': self.controls = child
+			elif child.UIAAutomationId == 'OBSApp.OBSBasic.sourcesDock': self.sources = child
+			elif child.UIAAutomationId == 'OBSApp.OBSBasic.statusbar': self.status = child
+			elif child.UIAAutomationId == 'OBSApp.OBSBasic.scenesDock': self.scenes = child
+			elif child.UIAAutomationId == 'OBSApp.OBSBasic.mixerDock': self.audio_mixer = child
 
 	@script(
 		category=category,
@@ -81,7 +85,7 @@ class AppModule(appModuleHandler.AppModule):
 		gesture="kb:control+t"
 	)
 	def script_transmision(self, gesture):
-		if self.pressControl('OBSBasic.controlsDock.OBSBasicControls.controlsFrame.streamButton'):
+		if self.pressControl('OBSApp.OBSBasic.controlsDock.OBSBasicControls.controlsFrame.streamButton'):
 			message(self.notFound)
 
 	@script(
@@ -90,8 +94,8 @@ class AppModule(appModuleHandler.AppModule):
 		description= _('Pulsa el botón Iniciar grabación'),
 		gesture="kb:control+r"
 	)
-	def script_grabacion(self, gesture):
-		if self.pressControl('OBSBasic.controlsDock.OBSBasicControls.controlsFrame.recordButton'):
+	def script_record(self, gesture):
+		if self.pressControl('OBSApp.OBSBasic.controlsDock.OBSBasicControls.controlsFrame.recordButton'):
 			message(self.notFound)
 
 	@script(
@@ -100,8 +104,8 @@ class AppModule(appModuleHandler.AppModule):
 		description= _('Pulsa el botón ajustes'),
 		gesture="kb:control+a"
 	)
-	def script_ajustes(self, gesture):
-		if self.pressControl('OBSBasic.controlsDock.OBSBasicControls.controlsFrame.settingsButton'):
+	def script_settings(self, gesture):
+		if self.pressControl('OBSApp.OBSBasic.controlsDock.OBSBasicControls.controlsFrame.settingsButton'):
 			message(self.notFound)
 
 	@script(
@@ -111,7 +115,7 @@ class AppModule(appModuleHandler.AppModule):
 		gesture="kb:control+p"
 	)
 	def script_pausar(self, gesture):
-		if self.pressControl('OBSBasic.controlsDock.OBSBasicControls.controlsFrame.pauseRecordButton'):
+		if self.pressControl('OBSApp.OBSBasic.controlsDock.OBSBasicControls.controlsFrame.pauseRecordButton'):
 			# Translators: Mensaje sobre ninguna grabación en curso
 			message(_('Ninguna grabación en curso'))
 
