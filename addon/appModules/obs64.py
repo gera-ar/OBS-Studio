@@ -50,8 +50,8 @@ class AppModule(appModuleHandler.AppModule):
 		}
 		api.moveMouseToNVDAObject(obj)
 		if text: mute(0.2, obj.name)
-		winUser.mouse_event(buttons[mouse_button][0],0,0,None,None)
-		winUser.mouse_event(buttons[mouse_button][1],0,0,None,None)
+		winUser.mouse_event(buttons[mouse_button][0],0,0,0,0)
+		winUser.mouse_event(buttons[mouse_button][1],0,0,0,0)
 		mute(0.3)
 
 	def pressControl(self, id):
@@ -108,17 +108,6 @@ class AppModule(appModuleHandler.AppModule):
 		if self.pressControl('OBSApp.OBSBasic.controlsDock.OBSBasicControls.controlsFrame.settingsButton'):
 			message(self.notFound)
 
-	@script(
-		category=category,
-		# Translators: Descripción del elemento en el diálogo gestos de entrada
-		description= _('Pulsa el botón pausar grabación'),
-		gesture="kb:control+p"
-	)
-	def script_pausar(self, gesture):
-		if self.pressControl('OBSApp.OBSBasic.controlsDock.OBSBasicControls.controlsFrame.pauseRecordButton'):
-			# Translators: Mensaje sobre ninguna grabación en curso
-			message(_('Ninguna grabación en curso'))
-
 	@script(gestures=["kb:control+1","kb:control+2","kb:control+3"])
 	def script_panelsFocus(self, gesture):
 		x = int(gesture.mainKeyName)
@@ -129,18 +118,6 @@ class AppModule(appModuleHandler.AppModule):
 			self.mouseClick(self.scenes, 'left', True)
 		elif x == 2 and self.sources:
 			self.mouseClick(self.sources, 'left', True)
-
-	@script(gestures=[f"kb:control+shift+{i}" for i in range(1, 10)])
-	def script_mixerAudio(self, gesture):
-		key = int(gesture.mainKeyName) - 1
-		if not self.audio_mixer: self.windowObjects()
-		try:
-			obj = self.audio_mixer.firstChild.firstChild.firstChild.firstChild.firstChild.firstChild.children[key].firstChild
-			mute(0.1, obj.next.name)
-			obj.setFocus()
-		except (AttributeError, IndexError):
-			# Translators: Anuncia que no se han encontrado propiedades de audio
-			message(_('Sin propiedades de audio'))
 
 	@script(
 		category=category,

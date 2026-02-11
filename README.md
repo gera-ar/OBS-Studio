@@ -4,7 +4,7 @@ Autor; [Gerardo Kessler](http://gera.ar)
 
 ## Paneles de la interfaz
 
-Los diferentes paneles contienen elementos de cada sección de la interfaz. Estos paneles pueden mostrarse u ocultarse desde la sección paneles que se encuentran en la barra de menú.
+Los diferentes paneles contienen elementos de cada sección de la interfaz. Estos paneles pueden mostrarse u ocultarse desde la sección paneles que se encuentran en la barra de menú marcando y desmarcando la casilla correspondiente.
 Para este complemento, los paneles mas importantes con los cuales se interactúa son:
 
 * Escenas
@@ -16,10 +16,8 @@ Por lo que es imnportante que estos estén visibles en la interfaz para el corre
 
 ## Comandos del complemento:
 
-* Control + shift + números alfanuméricos del 1 al 9; Enfoca y verbaliza los dispositivos de audio según su posición.
 * Control + r; Inicia y detiene la grabación.
 * Control + t; comienza y detiene la transmisión.
-* Control + p; pausa y reanuda la grabación en curso.
 * Control + a; abre los ajustes del programa.
 * Control + shift + r; verbaliza el tiempo y estado de la grabación.
 * Control + shift + t; verbaliza el tiempo y estado de la transmisión.
