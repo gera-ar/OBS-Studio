@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: obs versão 0.1\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2021-09-20 09:07-0300\n"
-"PO-Revision-Date: 2024-08-26 12:42+0500\n"
+"POT-Creation-Date: 2025-07-04 10:42+0500\n"
+"PO-Revision-Date: 2025-07-04 10:42+0500\n"
 "Last-Translator: Danil Kostenkov <danilkostenkov38@gmail.com>\n"
 "Language-Team: \n"
 "Language: ru_RU\n"
@@ -12,80 +12,57 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 3.4.4\n"
-"X-Poedit-Basepath: ../../../appModules\n"
+"X-Generator: Poedit 3.6\n"
+"X-Poedit-Basepath: ../../../..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-0: addon/appModules\n"
+"X-Poedit-SearchPath-1: .\n"
+"X-Poedit-SearchPath-2: .vscode/typings\n"
 
-#: addon\appModules\obs64.py:66
-msgid "Mostrar Grabaciones"
-msgstr "Показать Записи"
+#: addon/appModules/obs64.py:44
+msgid "Elemento no encontrado"
+msgstr "Элемент не найден"
 
-#. Translators: Descripción del elemento en el diálogo gestos de entrada
-#: addon\appModules\obs64.py:78
+#: addon/appModules/obs64.py:80
 msgid "Pulsa el botón Iniciar transmisión"
 msgstr "Нажать кнопку начать трансляцию"
 
-#. Translators: Descripción del elemento en el diálogo gestos de entrada
-#: addon\appModules\obs64.py:87
+#: addon/appModules/obs64.py:90
 msgid "Pulsa el botón Iniciar grabación"
 msgstr "Нажать кнопку Начать запись"
 
-#. Translators: Descripción del elemento en el diálogo gestos de entrada
-#: addon\appModules\obs64.py:96
+#: addon/appModules/obs64.py:100
 msgid "Pulsa el botón ajustes"
 msgstr "Нажать кнопку Настройки"
 
-#. Translators: Descripción del elemento en el diálogo gestos de entrada
-#: addon\appModules\obs64.py:105
+#: addon/appModules/obs64.py:110
 msgid "Pulsa el botón pausar grabación"
 msgstr "Нажать кнопку Приостановить запись"
 
-#. Translators: Anuncia que no hay fuentes seleccionadas
-#: addon\appModules\obs64.py:135
-msgid "Sin fuente asignada"
-msgstr "Нет назначенного источника"
+#: addon/appModules/obs64.py:116
+msgid "Ninguna grabación en curso"
+msgstr "Запись не ведётся"
 
-#. Translators: Descripción del elemento en el diálogo gestos de entrada
-#: addon\appModules\obs64.py:140
-msgid "Crea una nueva fuente"
-msgstr "Создать новую сцену"
-
-#. Translators: Anuncia que no se han encontrado propiedades de audio
-#: addon\appModules\obs64.py:168
+#: addon/appModules/obs64.py:139
 msgid "Sin propiedades de audio"
 msgstr "Нет свойств звука"
 
-#. Translators: Descripción del elemento en el diálogo gestos de entrada
-#: addon\appModules\obs64.py:173
+#: addon/appModules/obs64.py:144
 msgid "Verbaliza el tiempo  grabado"
 msgstr "Сообщить длительность записи"
 
-#. Translators: Descripción del elemento en el diálogo gestos de entrada
-#: addon\appModules\obs64.py:187
+#: addon/appModules/obs64.py:157
 msgid "Verbaliza el tiempo transmitido"
 msgstr "Сообщить длительность трансляции"
 
-#. Translators: Descripción del elemento en el diálogo gestos de entrada
-#: addon\appModules\obs64.py:201
-msgid "Enfoca el panel de botones si es posible"
-msgstr "Перейти на панель кнопок, если это возможно"
-
-#. Add-on summary, usually the user visible name of the addon.
-#. Translators: Summary for this add-on
-#. to be shown on installation and add-on information found in Add-ons Manager.
 #: buildVars.py:23
 msgid "OBS-Studio"
-msgstr "Улучшение доступности OBSStudio"
+msgstr "OBS-Studio (Улучшение доступности OBSStudio)"
 
-#. Add-on description
-#. Translators: Long description to be shown for this add-on on add-on information from add-ons manager
 #: buildVars.py:26
 msgid ""
-"Complemento sencillo que pretende facilitar la interacción con algunas "
-"funciones del programa añadiendo atajos de teclado, enfoque de elementos y "
-"lectura de estados"
+"Módulo que añade atajos de teclado para el enfoque y activación de elementos "
+"de la interfaz, así como la verbalización de estados"
 msgstr ""
-"Дополнение OBSStudio , предназначеное для облегчения взаимодействия с "
-"некоторыми функциями одноимённой программы путём добавления сочетаний "
-"клавиш, фокусировки элементов и чтения состояния"
+"Это дополнение добавляет сочетания клавиш для фокусировки и активации "
+"элементов интерфейса, а также озвучивание состояний"
